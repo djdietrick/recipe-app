@@ -22,7 +22,7 @@ export default {
 <style lang="scss">
 .home {
   display: grid;
-  grid-template-columns: 20% 1fr;
+  grid-template-columns: 15rem 1fr;
   height: 100vh;
   width: 100vw;
 }

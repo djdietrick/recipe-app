@@ -15,7 +15,7 @@ h1 {
     display: block;
     backface-visibility: hidden;
     margin-bottom: 6rem;
-    text-transform: uppercase;
+    //text-transform: uppercase;
 
     color: $h1-color;
     font-weight: $h1-font-weight;
@@ -75,6 +75,7 @@ p {
         color: $color-black;
     }
     &--gradient {
+        background-clip: text;
         -webkit-background-clip: text;
         color: transparent;
         background-image: linear-gradient(to right, $color-primary-light, $color-primary-dark);

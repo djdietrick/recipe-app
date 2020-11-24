@@ -1,6 +1,8 @@
 <template>
     <div class="list">
-        <div class="list__item" v-for="(item, i) in list" :key="i">
+        <div class="list__item" v-for="(item, i) in list" :key="i"
+            @click="selectedRecipe = item"
+            :class="{ selected: selectedRecipe && selectedRecipe.title === item.title}">
             <div class="list__item__text">{{item.title}}</div>
         </div>
     </div>
@@ -11,23 +13,31 @@ import Vue from 'vue'
 export default Vue.extend({
     props: {
         list: {
-            default: [
-                {
-                    title: 'Recipe'
-                },
-                {
-                    title: 'Recipe2'
-                },
-                {
-                    title: 'Recipe3'
-                },
-                {
-                    title: 'Recipe4'
-                },
-                {
-                    title: 'Recipe5'
-                }
-            ]
+            type: Array,
+            default() {
+                return [
+                    {
+                        title: 'Recipe'
+                    },
+                    {
+                        title: 'Recipe2'
+                    },
+                    {
+                        title: 'Recipe3'
+                    },
+                    {
+                        title: 'Recipe4'
+                    },
+                    {
+                        title: 'Recipe5'
+                    }
+                ]
+            } 
+        }
+    },
+    watch: {
+        selectedRecipe: function(recipe) {
+            if(recipe) this.$emit('selected-recipe', recipe);
         }
     },
     data() {
@@ -36,9 +46,9 @@ export default Vue.extend({
         }
     },
     created() {
-        if(this.list.length != 0) {
-            this.selectedRecipe = this.list[0]
-        }
+        // if(this.list.length != 0) {
+        //     this.selectedRecipe = this.list[0] as Object
+        // }
     }
 })
 </script>
@@ -52,13 +62,14 @@ export default Vue.extend({
 
     &__item {
         padding: 1rem 2rem;
-        margin-top: 0.5rem;
+        margin: 0.5rem 0.25rem;
         transition: 0.2s ease-in-out;
         cursor: pointer;
-        width: 100%;
+        width: auto;
+        border-radius: 1rem;
 
         &:hover {
-            background-color: $color-white;
+            background-color: rgba($color-tertiary, 0.35);
         }
         &--selected {
             background-color: $color-white;
@@ -68,6 +79,10 @@ export default Vue.extend({
             font-size: 1.4rem;
         }
     }
+}
+
+.selected {
+    background-color: rgba($color-tertiary, 0.7);
 }
 
 </style>

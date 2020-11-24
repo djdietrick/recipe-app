@@ -8,6 +8,11 @@ import 'firebase/functions';
 import 'firebase/database';
 import 'firebase/auth';
 
+const DashVue = require('dash-vue');
+import 'dash-vue/dist/dash-vue.css';
+
+Vue.use(DashVue);
+
 firebase.initializeApp({
   apiKey: process.env.VUE_APP_API_KEY,
   authDomain: "dash-website-1b9cb.firebaseapp.com",

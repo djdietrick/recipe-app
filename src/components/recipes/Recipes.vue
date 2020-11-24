@@ -1,6 +1,6 @@
 <template>
     <div class="recipes">
-        <RecipeList :selectedRecipe="selectedRecipe"/>
+        <RecipeList :selectedRecipe="selectedRecipe" v-on:selected-recipe="setRecipe"/>
         <RecipeDetails :recipe="selectedRecipe"/>
     </div> 
 </template>
@@ -17,7 +17,12 @@ export default Vue.extend({
     },
     data() {
         return {
-            selectedRecipe: null
+            selectedRecipe: {}
+        }
+    },
+    methods: {
+        setRecipe(recipe: Object) {
+            this.selectedRecipe = recipe;
         }
     }
 })
