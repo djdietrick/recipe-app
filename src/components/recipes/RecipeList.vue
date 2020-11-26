@@ -17,7 +17,24 @@ export default Vue.extend({
             default() {
                 return [
                     {
-                        title: 'Recipe'
+                        title: 'Recipe',
+                        ingredients: [
+                            {
+                                name: 'butter',
+                                qty: 1,
+                                unit: 'cup'
+                            },
+                            {
+                                name: 'eggs',
+                                qty: 2,
+                                unit: ''
+                            },
+                            {
+                                name: 'milk',
+                                qty: '1',
+                                unit: 'cup'
+                            }
+                        ]
                     },
                     {
                         title: 'Recipe2'

@@ -52,10 +52,6 @@ p {
     font-weight: $p-font-weight;
     letter-spacing: $p-letter-spacing;
     color: $p-color;
-
-    &:not(:last-child) {
-        margin-bottom: 3rem;
-    }
 }
 
 .text {

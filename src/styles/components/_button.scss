@@ -8,10 +8,9 @@
         display: inline-block;
         border-radius: 10rem;
         transition: all .2s;
-        position: relative;
+        //position: relative;
         font-size: $default-font-size;
         background-color: $color-primary;
-        border: 1.5px solid $color-primary-light;
         color: $color-white;
 
         //Change for the <button> element
@@ -19,13 +18,8 @@
     }
     
     &:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 1rem 2rem rgba($color-black,.2);
-
-        &::after {
-            transform: scaleX(1.4) scaleY(1.6);
-            opacity: 0;
-        }
+        transform: translateY(-1px);
+        box-shadow: 0 0.5rem 1rem rgba($color-black,.2);
     }
     
     &:active,
