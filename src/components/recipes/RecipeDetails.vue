@@ -54,18 +54,21 @@ export default Vue.extend({
         }
     },
     watch: {
-        newIngredient: function(i) {
-            if(i.name !== '' && i.qty !== 0) {
-                this.recipe.ingredients.push({
-                    ...this.newIngredient,
-                    qty: parseInt(this.newIngredient.qty)
-                });
-                this.newIngredient = {
-                    name: '',
-                    qty: '',
-                    unit: ''
-                };
-            }
+        newIngredient: {
+            handler(i) {
+                if(i.name !== '' && i.qty !== '') {
+                    this.recipe.ingredients.push({
+                        ...this.newIngredient,
+                        qty: parseInt(this.newIngredient.qty)
+                    });
+                    this.newIngredient = {
+                        name: '',
+                        qty: '',
+                        unit: ''
+                    };
+                }
+            },
+            deep: true
         }
     },
     created() {
