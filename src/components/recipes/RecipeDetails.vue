@@ -5,19 +5,39 @@
         </div>
         <div class="details__container" v-else>
             <div class="details__title">
-                <dash-text-toggle-input placeholder="Title" v-bind:value.sync="recipe.title" />
+                <div v-if="editing">
+                    <form class="form details__title__form" @submit.prevent="submit">
+                        <input type="text" class="form__input details__title__title" v-model="recipe.title" placeholder="Title"/>
+                        <input type="submit" style="display:none" />
+                    </form>
+                </div>
+                <div v-else>
+                    {{recipe.title}}
+                </div>
             </div>
             <div class="details__ingredients">
                 <h2 class="details__ingredients__title">Ingredients</h2>
+                <div class="details__ingredients__add add" v-if="editing"
+                    @click="addBlankIngredient">+</div>
                 <div class="details__ingredients__list">
-                    <Ingredient v-for="ingredient in recipe.ingredients" :key="ingredient.name" :ingredient="ingredient" :editing="editing"/>
-                    <Ingredient v-bind:ingredient.sync="newIngredient" :editing="editing"/>
+                    <div v-for="(ingredient, i) in recipe.ingredients" :key="i" class="ingredient__container">
+                        <Ingredient :key="i" :ingredient="ingredient" :editing="editing"/>
+                        <div class="ingredient__delete delete" v-if="editing" @click="deleteIngredient(i)">x</div>
+                    </div>
                 </div>
             </div>
             <div class="details__directions">
                 <h2 class="details__directions__title">Directions</h2>
+                <div class="details__directions__add add" v-if="editing"
+                    @click="addBlankDirection">+</div>
+                <div class="details__directions__list">
+                    <div v-for="(direction, i) in recipe.directions" :key="i + direction" class="direction__container">
+                        <Direction :key="i" :direction="direction" :i="i" @update:direction="recipe.directions[i] = $event" :editing="editing" />
+                        <div class="direction__delete delete" v-if="editing" @click="deleteDirection(i)">x</div>
+                    </div>
+                </div>
             </div>
-            <div class="details__togglebtn btn" @click="editing = !editing"
+            <div class="details__togglebtn btn" @click="toggleEdit"
                 :class="{editing: editing}">
                 {{editing ? 'Save' : 'Edit'}}
             </div>
@@ -29,6 +49,7 @@
 import Vue from 'vue'
 const Qty = require('js-quantities');
 import Ingredient from './Ingredient.vue';
+import Direction from './Direction.vue';
 
 export default Vue.extend({
     props: {
@@ -36,39 +57,46 @@ export default Vue.extend({
             type: Object,
             default: {
                 title: '',
-                ingredients: []
+                ingredients: [],
+                directions: []
             }
         }
     },
     components: {
-        Ingredient
+        Ingredient,
+        Direction
     },
     data() {
         return {
-            newIngredient: {
-                name: '',
-                qty: '',
-                unit: ''
-            },
             editing: false
         }
     },
-    watch: {
-        newIngredient: {
-            handler(i) {
-                if(i.name !== '' && i.qty !== '') {
-                    this.recipe.ingredients.push({
-                        ...this.newIngredient,
-                        qty: parseInt(this.newIngredient.qty)
-                    });
-                    this.newIngredient = {
-                        name: '',
-                        qty: '',
-                        unit: ''
-                    };
-                }
-            },
-            deep: true
+    methods: {
+        toggleEdit() {
+            if(this.editing) {
+                this.recipe.ingredients = this.recipe.ingredients.filter((ingredient: any) => {
+                    return ingredient.name !== '';
+                })
+                this.editing = false;
+            } else {
+                this.editing = true;
+            }
+        },
+        addBlankIngredient() {
+            this.recipe.ingredients.push({
+                name: '',
+                qty: '',
+                unit: ''
+            })
+        },
+        deleteIngredient(i: number) {
+            this.recipe.ingredients.splice(i, 1);
+        },
+        addBlankDirection() {
+            this.recipe.directions.push('');
+        },
+        deleteDirection(i: number) {
+            this.recipe.directions.splice(i, 1);
         }
     },
     created() {
@@ -89,8 +117,8 @@ export default Vue.extend({
     &__container {
         display: grid;
         position: relative;
-        grid-template-rows: 10rem minmax(20rem, 1fr) minmax(min-content,1fr);
-        grid-gap: 1rem;
+        grid-template-rows: 8vh minmax(20rem, 40vh) minmax(min-content,42vh);
+        grid-gap: 0.5rem;
         height: 100%;
         width: 100%;
     }
@@ -105,19 +133,49 @@ export default Vue.extend({
     }
 
     &__title {
-        @extend h1;
-        margin-bottom: 1rem;
+        @extend h2;
+        color: $color-primary-dark;
         border-bottom: 2px solid $color-grey-dark-2;
+        text-overflow: ellipsis;
+
+        &__form {
+            max-width: 80%;
+        }
     }
 
     &__ingredients {
         border-bottom: 2px solid $color-grey-dark-2;
+        position: relative;
+        overflow-y: auto;
 
+        &__add {
+            position: absolute;
+            top: 1rem;
+            right: 4rem;
+        }
 
         &__list {
             display: flex;
             flex-direction: column;
             align-items: stretch;
+            flex-wrap: wrap;
+        }
+
+        &__title {
+            color: $color-tertiary-dark;
+        }
+    }
+
+    &__directions {
+        position: relative;
+        &__title {
+            color: $color-tertiary-dark;
+        }
+
+        &__add {
+            position: absolute;
+            top: 1rem;
+            right: 4rem;
         }
     }
 
@@ -125,13 +183,61 @@ export default Vue.extend({
         &:not(:last-child) {
             margin-bottom: 0.5rem;
         }
+        &__container {
+            position: relative;
+        }
+        &__delete {
+            position: absolute;
+            right: 4rem;
+            top: 0;
+        }
+    }
+
+    .direction {
+        &__container {
+            position: relative;
+        }
+        &__delete {
+            position: absolute;
+            right: 4rem;
+            top: 0;
+        }
+    }
+
+    .add {
+        width: 5rem;
+        padding: 0.5rem 1rem;
+        background-color: $color-tertiary;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 1rem;
+        transition: 0.1s ease-in-out;
+
+        &:hover {
+            transform: translateY(-0.25rem);
+            box-shadow: 0 0.25rem 0.5rem rgba($color-black,.2);
+        }
+    }
+
+    .delete {
+        padding: 0.3rem 0.9rem;
+        background-color: $color-grey-dark-2;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: 0.2s ease-in-out;
+        font-size: 1.1rem;
+
+        &:hover {
+            background-color: $color-error;
+        }
     }
 
     &__togglebtn {
         position: absolute;
-        top: 2rem;
+        top: 0;
         right: 2rem;
         background-color: $color-grey-dark-1 !important;
+        font-size: 1.2rem !important;
     }
     &__togglebtn.editing {
         background-color: $color-primary !important;

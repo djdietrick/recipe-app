@@ -34,7 +34,8 @@ export default Vue.extend({
                                 qty: '1',
                                 unit: 'cup'
                             }
-                        ]
+                        ],
+                        directions: ['test']
                     },
                     {
                         title: 'Recipe2'

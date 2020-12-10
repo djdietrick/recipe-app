@@ -23,19 +23,16 @@ export default {
             default: false
         },
         ingredient: {
-            name: '',
-            qty: 0,
-            unit: ''
+            default: {
+                name: '',
+                qty: 0,
+                unit: ''
+            }
         }
     },
     methods: {
         submit() {
             this.$emit('update:ingredient', this.ingredient);
-        }
-    },
-    computed: {
-        showForm: function() {
-            return this.editing || this.ingredient.name === '' || this.ingredient.qty === 0;
         }
     }
 }
