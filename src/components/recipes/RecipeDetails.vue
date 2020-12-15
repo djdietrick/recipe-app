@@ -6,7 +6,7 @@
         <div class="details__container" v-else>
             <div class="details__title">
                 <div v-if="editing">
-                    <form class="form details__title__form" @submit.prevent="submit">
+                    <form class="form details__title__form" @submit.prevent="toggleEdit">
                         <input type="text" class="form__input details__title__title" v-model="recipe.title" placeholder="Title"/>
                         <input type="submit" style="display:none" />
                     </form>
@@ -41,27 +41,39 @@
                 :class="{editing: editing}">
                 {{editing ? 'Save' : 'Edit'}}
             </div>
+            <dash-modal v-if="editing" ref="deleteModal">
+                <template #trigger>
+                    <div class="details__deletebtn btn">Delete</div>
+                </template>
+                <template #content>
+                    <div class="details__deletebtn__confirm">
+                        <h2 class="details__deletebtn__confirm__text">Are you sure?</h2>
+                        <div class="btn btn--confirm" @click="deleteRecipe">Delete</div>
+                        <div class="btn btn--cancel" @click="closeDeleteModal">Cancel</div>
+                    </div>
+                </template>
+            </dash-modal>
         </div>
     </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
 const Qty = require('js-quantities');
 import Ingredient from './Ingredient.vue';
 import Direction from './Direction.vue';
+import {mapActions, mapGetters} from 'vuex';
 
-export default Vue.extend({
-    props: {
-        recipe: {
-            type: Object,
-            default: {
-                title: '',
-                ingredients: [],
-                directions: []
-            }
-        }
-    },
+export default {
+    // props: {
+    //     recipe: {
+    //         type: Object,
+    //         default: {
+    //             title: '',
+    //             ingredients: [],
+    //             directions: []
+    //         }
+    //     }
+    // },
     components: {
         Ingredient,
         Direction
@@ -71,12 +83,19 @@ export default Vue.extend({
             editing: false
         }
     },
+    computed: {
+        ...mapGetters({
+            recipe: 'getSelectedRecipe'
+        })
+    },
     methods: {
+        ...mapActions(['updateRecipe', 'delRecipe']),
         toggleEdit() {
             if(this.editing) {
-                this.recipe.ingredients = this.recipe.ingredients.filter((ingredient: any) => {
+                this.recipe.ingredients = this.recipe.ingredients.filter((ingredient) => {
                     return ingredient.name !== '';
                 })
+                this.updateRecipe(this.recipe);
                 this.editing = false;
             } else {
                 this.editing = true;
@@ -89,21 +108,29 @@ export default Vue.extend({
                 unit: ''
             })
         },
-        deleteIngredient(i: number) {
+        deleteIngredient(i) {
             this.recipe.ingredients.splice(i, 1);
         },
         addBlankDirection() {
             this.recipe.directions.push('');
         },
-        deleteDirection(i: number) {
+        deleteDirection(i) {
             this.recipe.directions.splice(i, 1);
+        },
+        deleteRecipe() {
+            this.delRecipe(this.recipe.id);
+            this.closeDeleteModal();
+            this.toggleEdit();
+        },
+        closeDeleteModal() {
+            this.$refs.deleteModal.close();
         }
     },
     created() {
         console.log(Qty.getKinds())
-        console.log(Qty.getUnits('mass'))
+        console.log(Qty.getUnits('volume'))
     }
-})
+}
 </script>
 
 <style lang="scss">
@@ -139,7 +166,10 @@ export default Vue.extend({
         text-overflow: ellipsis;
 
         &__form {
-            max-width: 80%;
+            max-width: 75%;
+            .form__input {
+                font-size: $h2-font-size;
+            }
         }
     }
 
@@ -204,21 +234,6 @@ export default Vue.extend({
         }
     }
 
-    .add {
-        width: 5rem;
-        padding: 0.5rem 1rem;
-        background-color: $color-tertiary;
-        text-align: center;
-        cursor: pointer;
-        border-radius: 1rem;
-        transition: 0.1s ease-in-out;
-
-        &:hover {
-            transform: translateY(-0.25rem);
-            box-shadow: 0 0.25rem 0.5rem rgba($color-black,.2);
-        }
-    }
-
     .delete {
         padding: 0.3rem 0.9rem;
         background-color: $color-grey-dark-2;
@@ -241,6 +256,35 @@ export default Vue.extend({
     }
     &__togglebtn.editing {
         background-color: $color-primary !important;
+    }
+
+    &__deletebtn {
+        position: absolute;
+        top: 0;
+        right: 10rem;
+        background-color: $color-error !important;
+        font-size: 1.2rem !important;
+
+        &__confirm {
+            height: 20vh;
+            width: 40vw;
+            background-color: $color-background;
+            text-align: center;
+            padding-top: 2rem;
+
+            &__text {
+                display: block;
+                margin-bottom: 2rem;
+            }
+            
+            .btn--cancel {
+                background-color: $color-grey-dark-1 !important;
+            }
+            .btn--confirm {
+                background-color: $color-error !important;
+                margin-right: 2rem;
+            }
+        }
     }
 }
 

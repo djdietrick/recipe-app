@@ -1,19 +1,31 @@
 <template>
   <div id="app">
-    <Home />
+    <router-view />
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+<script>
 import Home from './views/Home.vue';
-
-@Component({
+import Auth from './views/Auth.vue';
+import {mapGetters} from 'vuex';
+export default {
   components: {
-    Home
+    home: Home,
+    auth: Auth
+  },
+  computed: {
+    ...mapGetters({
+      user: 'getUser'
+    }),
+    selectedComponent() {
+      if(this.user) {
+        return "home";
+      } else {
+        return "auth";
+      }
+    }
   }
-})
-export default class App extends Vue {}
+}
 </script>
 
 <style lang="scss">

@@ -9,7 +9,7 @@
 
     &__input {
         font-family: inherit;
-        font-size: inherit;
+        font-size: $default-font-size;
         font-weight: inherit;
         letter-spacing: inherit;
         color: inherit;
@@ -27,7 +27,7 @@
         &:focus {
             outline: none;
             //box-shadow: 0 1rem 2rem rgba($color-black, .1);
-            border-bottom: 2px solid $color-primary;
+            border: 1px solid $color-primary;
         }
     }
 

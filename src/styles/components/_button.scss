@@ -12,6 +12,7 @@
         font-size: $default-font-size;
         background-color: $color-primary;
         color: $color-white;
+        text-align: center;
 
         //Change for the <button> element
         cursor: pointer;
@@ -64,6 +65,10 @@
         animation: moveInBottom .5s ease-out .75s;
         animation-fill-mode: backwards;
     }
+
+    &__selected {
+        background-color: $color-tertiary;
+    }
 }
 
 .btn-text {
@@ -88,5 +93,21 @@
     &:active {
         box-shadow: 0 .5rem 1rem rgba($color-black, .15);
         transform: translateY(0);
+    }
+}
+
+.add {
+    width: 5rem;
+    padding: 0.2rem 1rem;
+    background-color: $color-tertiary;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 1rem;
+    transition: 0.1s ease-in-out;
+    font-size: 1.5rem;
+
+    &:hover {
+        transform: translateY(-0.25rem);
+        box-shadow: 0 0.25rem 0.5rem rgba($color-black,.2);
     }
 }

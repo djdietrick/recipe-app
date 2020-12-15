@@ -1,29 +1,35 @@
 <template>
     <div class="nav">
         <div class="nav__group">
-            <div class="nav__item" v-for="(item, i) in items" :key="i">
+            <router-link v-for="(item, i) in items" :key="i" class="nav__item" :to="item.to">
                 {{item.text}}
-            </div>
+            </router-link>
+            <div class="nav__item" @click="logout">Logout</div>
         </div>
     </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
+<script>
+import {mapActions} from 'vuex';
+export default {
     data() {
         return {
             items: [
                 {
-                    text: 'Recipes'
+                    text: 'Recipes',
+                    to: '/recipes'
                 },
                 {
-                    text: 'Lists'
+                    text: 'Lists',
+                    to: '/lists'
                 }
             ]
         }
+    },
+    methods: {
+        ...mapActions(['logout'])
     }
-})
+}
 </script>
 
 <style lang="scss">

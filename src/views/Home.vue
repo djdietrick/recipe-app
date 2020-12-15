@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Nav />
-    <Recipes />
+    <router-view />
   </div>
 </template>
 
@@ -9,12 +9,19 @@
 // @ is an alias to /src
 import Nav from '../components/Nav.vue';
 import Recipes from '../components/recipes/Recipes.vue';
+import {mapActions} from 'vuex';
 
 export default {
   name: 'Home',
   components: {
     Nav,
     Recipes
+  },
+  methods: {
+    ...mapActions(['fetchRecipes'])
+  },
+  created() {
+    this.fetchRecipes();
   }
 }
 </script>

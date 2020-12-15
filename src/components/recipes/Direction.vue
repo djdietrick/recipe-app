@@ -51,7 +51,7 @@ export default {
 
     &__number {
         margin-right: 0.5rem;
-        color: $color-grey-dark-11;
+        color: $color-grey-dark-1;
     }
     &__area {
         width: 100%;

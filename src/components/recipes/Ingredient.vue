@@ -5,7 +5,10 @@
                 <input type="text" class="form__input ingredient__name" v-model="ingredient.name" 
                     placeholder="New ingredient" @blur="submit"/>
                 <input type="text" class="form__input ingredient__qty" v-model="ingredient.qty" placeholder="Qty" @blur="submit"/>
-                <input type="text" class="form__input ingredient__unit" v-model="ingredient.unit" placeholder="Unit" @blur="submit">
+                <input type="text" class="form__input ingredient__unit" v-model="ingredient.unit" placeholder="Unit" @blur="submit" list="units">
+                <datalist id="units">
+                    <option v-for="unit in units" :key="unit" :value="unit"/>
+                </datalist>
                 <input type="submit" style="display:none" />
             </form>
         </div>
@@ -30,9 +33,21 @@ export default {
             }
         }
     },
+    data() {
+        return {
+            units: [
+                'Grams','Ounce','Oz','lb','Pound','Kilogram','g','kg','Cup','Tsp','Tbsp',
+                'Fluid-ounce','floz','Gallon','Liter','Milliliter','ml','L','Quart','Pint'
+            ]
+        }
+    },
     methods: {
         submit() {
-            this.$emit('update:ingredient', this.ingredient);
+            this.$emit('update:ingredient', {
+                name: this.ingredient.name.trim().toLowerCase(),
+                qty: parseInt(this.ingredient.qty.trim()),
+                
+            });
         }
     }
 }
@@ -48,8 +63,10 @@ export default {
         display: grid;
         grid-template-columns: 50% 10% 20%;
         grid-gap: 1rem;
+        align-items: center;
     }
-
 }
+
+
     
 </style>

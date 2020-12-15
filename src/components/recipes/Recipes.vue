@@ -1,16 +1,15 @@
 <template>
     <div class="recipes">
-        <RecipeList :selectedRecipe="selectedRecipe" v-on:selected-recipe="setRecipe"/>
-        <RecipeDetails :recipe="selectedRecipe"/>
+        <RecipeList />
+        <RecipeDetails />
     </div> 
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
 import RecipeList from './RecipeList.vue';
 import RecipeDetails from './RecipeDetails.vue';
 
-export default Vue.extend({
+export default {
     components: {
         RecipeList,
         RecipeDetails
@@ -21,11 +20,11 @@ export default Vue.extend({
         }
     },
     methods: {
-        setRecipe(recipe: Object) {
+        setRecipe(recipe) {
             this.selectedRecipe = recipe;
         }
     }
-})
+}
 </script>
 
 <style lang="scss">

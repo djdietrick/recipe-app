@@ -5,7 +5,7 @@ import store from './store'
 
 import firebase from 'firebase/app';
 import 'firebase/functions';
-import 'firebase/database';
+import 'firebase/firestore';
 import 'firebase/auth';
 
 const DashVue = require('dash-vue');
@@ -24,7 +24,7 @@ firebase.initializeApp({
 });
 
 export const functions = firebase.functions();
-export const db = firebase.database();
+export const db = firebase.firestore();
 export const auth = firebase.auth();
 
 Vue.config.productionTip = false
