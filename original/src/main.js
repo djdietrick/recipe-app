@@ -10,6 +10,7 @@ import 'firebase/auth';
 
 const DashVue = require('dash-vue');
 import 'dash-vue/dist/dash-vue.css';
+import './styles/main.scss';
 
 Vue.use(DashVue);
 
