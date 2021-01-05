@@ -6,7 +6,7 @@
   "author": "Dave Dietrick <djdietrick@gmail.com>",
   "private": true,
   "scripts": {
-    "test": "echo \"No test specified\" && exit 0"
+    "dev": "cross-env QENV=development quasar dev"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
@@ -18,7 +18,8 @@
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",
-    "@quasar/quasar-app-extension-qenv": "^1.0.3"
+    "@quasar/quasar-app-extension-qenv": "^1.0.3",
+    "cross-env": "^7.0.3"
   },
   "browserslist": [
     "last 10 Chrome versions",
