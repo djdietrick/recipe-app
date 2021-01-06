@@ -1,8 +1,13 @@
 <template>
     <q-layout view="lHh lpR fFf" class="recipes">
         <q-header></q-header>
-        <q-drawer show-if-above side="left" bordered>
-            <q-scroll-area class="fit">
+        <q-drawer show-if-above side="left" bordered class="recipes__list">
+            <q-toolbar class="q-pa-md recipes__list__toolbar">
+                <q-input filled dense></q-input>
+                <q-space></q-space>
+                <q-btn round color="primary" icon="control_point" size="sm"></q-btn>
+            </q-toolbar>
+            <q-scroll-area class="fit recipes__list__container">
                 <q-list bordered separator>
                     <q-item clickable v-ripple v-for="recipe in recipes" :key="recipe.id"
                         :active="selectedRecipe.id === recipe.id" active-class="bg-blue-7 text-white"
@@ -22,7 +27,7 @@
 <script>
 import RecipeList from '../components/recipes/RecipeList.vue';
 import RecipeDetails from '../components/recipes/RecipeDetails.vue';
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
     components: {
@@ -40,9 +45,13 @@ export default {
         })
     },
     methods: {
+        ...mapActions(['fetchRecipes']),
         setRecipe(recipe) {
             this.selectedRecipe = recipe;
         }
+    },
+    created() {
+        this.fetchRecipes();
     }
 }
 </script>

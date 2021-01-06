@@ -15,25 +15,25 @@ const mutations = {
 
 const actions = {
     async signupWithEmail({commit}, form) {
-        const cred = await auth.createUserWithEmailAndPassword(form.email, form.password);
-        await db.collection('users').doc(cred.user.uid).set({
+        const cred = await auth().createUserWithEmailAndPassword(form.email, form.password);
+        await db().collection('users').doc(cred.user.uid).set({
             email: form.email,
             name: form.name,
             userId: cred.user.uid
         });
-        const user = await db.collection('users').doc(cred.user.uid).get();
+        const user = await db().collection('users').doc(cred.user.uid).get();
         commit('setUser', user.data());
     },
     async signupWithGoogle({commit}) {
         
     },
     async loginWithEmail({commit}, form) {
-        const cred = await auth.signInWithEmailAndPassword(form.email, form.password);
-        const user = await db.collection('users').doc(cred.user.uid).get();
+        const cred = await auth().signInWithEmailAndPassword(form.email, form.password);
+        const user = await db().collection('users').doc(cred.user.uid).get();
         commit('setUser', user.data());
     },
     async logout({commit}) {
-        auth.signOut().then(() => { commit('removeUser') });
+        auth().signOut().then(() => { commit('removeUser') });
     }
 }
 

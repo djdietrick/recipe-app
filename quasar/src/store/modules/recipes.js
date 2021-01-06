@@ -32,7 +32,7 @@ const actions = {
         if(!rootState.user)
             throw new Error("Not logged in");
 
-        db.collection('recipes').where('userId', '==', rootState.user.userId).get()
+        db().collection('recipes').where('userId', '==', rootState.user.userId).get()
             .then((snapshot) => {
                 let recipes = [];
                 snapshot.forEach(doc => {
@@ -56,7 +56,7 @@ const actions = {
             userId: rootState.user.userId
         }
 
-        await db.collection('recipes').doc(recipe.id).set(recipe);
+        await db().collection('recipes').doc(recipe.id).set(recipe);
 
         commit('addRecipe', recipe);
     },
@@ -64,7 +64,7 @@ const actions = {
         if(!rootState.user)
             throw new Error("Not logged in");
 
-        await db.collection('recipes').doc(id).delete();
+        await db().collection('recipes').doc(id).delete();
 
         commit('delRecipe', id);
     },
@@ -74,7 +74,7 @@ const actions = {
         
         console.log(recipe);
 
-        await db.collection('recipes').doc(recipe.id).set(recipe);
+        await db().collection('recipes').doc(recipe.id).set(recipe);
 
         commit('updateRecipe', recipe);
     }

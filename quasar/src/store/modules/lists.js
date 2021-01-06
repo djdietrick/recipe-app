@@ -1,3 +1,5 @@
+import {db} from '../../services/firebase';
+
 const state = {
     lists: []
 }
@@ -22,7 +24,7 @@ const actions = {
         if(!rootState.user)
             throw new Error("Not logged in");
 
-        db.collection('lists').where('userId', '==', rootState.user.userId).get()
+        db().collection('lists').where('userId', '==', rootState.user.userId).get()
             .then((snapshot) => {
                 let lists = [];
                 snapshot.forEach(doc => {
