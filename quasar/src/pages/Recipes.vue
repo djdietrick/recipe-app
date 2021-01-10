@@ -10,7 +10,7 @@
             <q-scroll-area class="fit recipes__list__container">
                 <q-list bordered separator>
                     <q-item clickable v-ripple v-for="recipe in recipes" :key="recipe.id"
-                        :active="selectedRecipe.id === recipe.id" active-class="bg-blue-7 text-white"
+                        :active="isSelected(recipe.id)" active-class="bg-blue-7 text-white"
                         @click="selectedRecipe = recipe">
                         <q-item-section>{{recipe.title}}</q-item-section>
                     </q-item>
@@ -19,7 +19,7 @@
         </q-drawer>
 
         <q-page-container>
-            test
+            <router-view />
         </q-page-container>
     </q-layout>
 </template>
@@ -49,10 +49,17 @@ export default {
         setRecipe(recipe) {
             this.selectedRecipe = recipe;
         },
-        async addRecipeAndFocus() {
-            await this.addRecipe();
-            this.setSelectedRecipe(0);
-        },
+        isSelected(id) {
+            return id === this.$route.params.id;
+        }
+    },
+    watch: {
+        selectedRecipe: function(recipe) {
+            if(recipe.id) this.$router.push({
+                name: 'RecipeDetails',
+                params: { id: recipe.id}
+            });
+        }
     },
     created() {
         this.fetchRecipes();
@@ -61,10 +68,5 @@ export default {
 </script>
 
 <style lang="scss">
-.recipes {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    height: 100%;
-    width: 100%;
-}
+
 </style>

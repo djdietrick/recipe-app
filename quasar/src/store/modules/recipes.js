@@ -77,6 +77,12 @@ const actions = {
         await db().collection('recipes').doc(recipe.id).set(recipe);
 
         commit('updateRecipe', recipe);
+    },
+    getRecipeWithId({state}, id) {
+        let r = state.recipes.filter(recipe => recipe.id === id);
+        if(r.length !== 1) 
+            throw new Error(`Invalid number of results for id ${id}: ${r}`);
+        return r[0];
     }
 }
 

@@ -57,9 +57,10 @@
       </q-drawer>
 
     <q-page-container>
-      <q-page>
+      <!-- <q-page>
       <component :is="selectedComponent"></component>
-      </q-page>
+      </q-page> -->
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>

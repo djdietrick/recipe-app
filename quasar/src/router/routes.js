@@ -9,7 +9,18 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      { 
+        path: 'recipes', 
+        component: () => import('pages/Recipes.vue'),
+        children: [
+          {
+            path: ':id',
+            name: 'RecipeDetails',
+            component: () => import('components/recipes/RecipeDetails.vue'),
+            props: route => ({id: route.params.id})
+          }
+        ]  
+      }
     ]
   },
 
