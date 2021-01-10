@@ -6,12 +6,6 @@
         <q-toolbar-title>
           Recipe Keeper
         </q-toolbar-title>
-
-        <q-tabs v-model="selectedComponent">
-          <q-tab name="recipes" label="Recipes"></q-tab>
-          <q-tab name="lists" label="Lists"></q-tab>
-        </q-tabs>
-
       </q-toolbar>
     </q-header>
 
@@ -44,7 +38,16 @@
 
           <q-item clickable>
             <q-item-section>
-              <q-icon name="receipt_long" />
+              <q-icon name="model_training" />
+            </q-item-section>
+            <q-item-section @click="dark = !dark">
+              Switch to {{dark ? 'Light Mode' : 'Dark Mode'}}
+            </q-item-section>
+          </q-item>
+
+          <q-item clickable>
+            <q-item-section>
+              <q-icon name="exit_to_app" />
             </q-item-section>
             <q-item-section @click="onLogout">
               Logout
@@ -71,12 +74,18 @@ export default {
   data () {
     return {
       selectedComponent: 'recipes',
-      drawer: false
+      drawer: false,
+      dark: false
     }
   },
   components: {
     'recipes': Recipes,
     'lists': Lists
+  },
+  watch: {
+    dark: function(val) {
+      this.$q.dark.set(val);
+    }
   },
   methods: {
     ...mapActions(['logout']),

@@ -5,7 +5,7 @@
             <q-toolbar class="q-pa-md recipes__list__toolbar">
                 <q-input filled dense></q-input>
                 <q-space></q-space>
-                <q-btn round color="primary" icon="control_point" size="sm"></q-btn>
+                <q-btn round color="primary" icon="control_point" size="sm" @click="addRecipeAndFocus" />
             </q-toolbar>
             <q-scroll-area class="fit recipes__list__container">
                 <q-list bordered separator>
@@ -45,10 +45,14 @@ export default {
         })
     },
     methods: {
-        ...mapActions(['fetchRecipes']),
+        ...mapActions(['fetchRecipes', 'addRecipe']),
         setRecipe(recipe) {
             this.selectedRecipe = recipe;
-        }
+        },
+        async addRecipeAndFocus() {
+            await this.addRecipe();
+            this.setSelectedRecipe(0);
+        },
     },
     created() {
         this.fetchRecipes();
