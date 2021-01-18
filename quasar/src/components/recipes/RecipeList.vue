@@ -1,5 +1,5 @@
 <template>
-    <div class="list">
+    <!-- <div class="list">
         <div class="list__header">
             <div class="list__header__title">Recipes</div>
             <div class="list__header__add add" @click="addRecipeAndFocus">+</div>
@@ -11,7 +11,7 @@
                 <div class="list__item__text">{{item.title}}</div>
             </div>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script>

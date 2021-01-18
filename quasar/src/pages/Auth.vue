@@ -1,11 +1,11 @@
 <template>
     <div class="q-pa-xl auth">
-        <q-card class="auth__card">
+        <q-card class="auth__card fixed-center">
             <q-tabs v-model="func">
                 <q-tab name="login" label="Login" />
                 <q-tab name="signup" label="Signup" />
             </q-tabs>
-            <q-form class="q-pa-lg" v-if="func == 'login'"
+            <q-form class="q-pa-lg q-gutter-md " v-if="func == 'login'"
                 @submit="login">
                 <q-input
                     filled
@@ -18,9 +18,10 @@
                     label="Password"
                     type="password"
                 />
-                <q-btn label="Submit" type="submit" color="primary"/>
+                <q-btn label="Login" type="submit" color="primary"/>
             </q-form>
-            <q-form v-else>
+            <q-form class="q-pa-lg q-gutter-md" v-else
+                @submit="signup">
 
             </q-form>
         </q-card>
@@ -47,7 +48,13 @@ export default {
                 email: this.email,
                 password: this.password
             });
-            this.$router.push('/');
+            this.$router.push('/recipes');
+        },
+        async signup() {
+            await this.signupWithEmail({
+                email: this.email,
+                password: this.password
+            })
         }
     }
 }

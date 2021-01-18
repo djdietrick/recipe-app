@@ -1,9 +1,8 @@
 <template>
-    <q-layout view="lHh lpR fFf" class="recipes">
-        <q-header></q-header>
-        <q-drawer show-if-above side="left" bordered class="recipes__list">
+    <q-layout container view="lHh lpR fFf" class="recipes">
+        <q-drawer show-if-above bordered class="recipes__list">
             <q-toolbar class="q-pa-md recipes__list__toolbar">
-                <q-input filled dense></q-input>
+                <q-input dense outlined placeholder="Search"></q-input>
                 <q-space></q-space>
                 <q-btn round color="primary" icon="control_point" size="sm" @click="addRecipeAndFocus" />
             </q-toolbar>
@@ -19,7 +18,7 @@
         </q-drawer>
 
         <q-page-container>
-            <router-view />
+            <router-view :key="$route.fullPath"/>
         </q-page-container>
     </q-layout>
 </template>
@@ -51,6 +50,14 @@ export default {
         },
         isSelected(id) {
             return id === this.$route.params.id;
+        },
+        addRecipeAndFocus() {
+            this.addRecipe().then(id => {
+                this.$router.push({
+                    name: 'RecipeDetails',
+                    params: {id}
+                })
+            })
         }
     },
     watch: {
@@ -68,5 +75,10 @@ export default {
 </script>
 
 <style lang="scss">
+
+.recipes {
+    height: 93vh;
+    width: 98vw;
+}
 
 </style>

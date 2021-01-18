@@ -59,6 +59,8 @@ const actions = {
         await db().collection('recipes').doc(recipe.id).set(recipe);
 
         commit('addRecipe', recipe);
+        
+        return recipe.id;
     },
     async delRecipe({commit, rootState}, id) {
         if(!rootState.user)
@@ -72,8 +74,6 @@ const actions = {
         if(!rootState.user)
             throw new Error("Not logged in");
         
-        console.log(recipe);
-
         await db().collection('recipes').doc(recipe.id).set(recipe);
 
         commit('updateRecipe', recipe);
@@ -82,7 +82,7 @@ const actions = {
         let r = state.recipes.filter(recipe => recipe.id === id);
         if(r.length !== 1) 
             throw new Error(`Invalid number of results for id ${id}: ${r}`);
-        return r[0];
+        return JSON.parse(JSON.stringify(r[0]));
     }
 }
 

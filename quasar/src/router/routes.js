@@ -18,6 +18,11 @@ const routes = [
             name: 'RecipeDetails',
             component: () => import('components/recipes/RecipeDetails.vue'),
             props: route => ({id: route.params.id})
+          },
+          {
+            path: '',
+            name: 'NoRecipe',
+            component: () => import('components/recipes/NoRecipe.vue')
           }
         ]  
       }

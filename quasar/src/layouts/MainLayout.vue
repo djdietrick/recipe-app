@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="lHh Lpr lFf" class="main-layout">
     <q-header elevated>
       <q-toolbar>
         <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
@@ -16,7 +16,7 @@
         content-class="bg-primary text-white"
       >
         <q-list>
-          <q-item clickable>
+          <q-item clickable class="q-mt-xl">
             <q-item-section>
               <q-icon name="local_dining" />
             </q-item-section>
