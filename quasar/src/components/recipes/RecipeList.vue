@@ -1,48 +1,44 @@
 <template>
-    <!-- <div class="list">
-        <div class="list__header">
-            <div class="list__header__title">Recipes</div>
-            <div class="list__header__add add" @click="addRecipeAndFocus">+</div>
-        </div>
-        <div class="list__container">
-            <div class="list__item" v-for="(item, i) in list" :key="i"
-                @click="setSelectedRecipe(i)"
-                :class="{ selected:  index === i}">
-                <div class="list__item__text">{{item.title}}</div>
-            </div>
-        </div>
-    </div> -->
+    <q-drawer show-if-above bordered class="recipes__list">
+        <q-toolbar class="q-pa-md recipes__list__toolbar">
+            <q-input dense outlined placeholder="Search"></q-input>
+            <q-space></q-space>
+            <q-btn round color="primary" icon="control_point" size="sm" @click="$emit('add-recipe')" />
+        </q-toolbar>
+        <q-scroll-area class="fit recipes__list__container">
+            <q-list bordered separator>
+                <q-item clickable v-ripple v-for="recipe in recipes" :key="recipe.id"
+                    :active="isSelected(recipe.id)" active-class="bg-blue-7 text-white"
+                    @click="setRecipe(recipe)">
+                    <q-item-section>{{recipe.title}}</q-item-section>
+                </q-item>
+            </q-list>
+        </q-scroll-area>
+    </q-drawer>
 </template>
 
 <script>
 import Vue from 'vue'
 import {mapGetters, mapActions} from 'vuex';
 export default {
-    computed: {
-        ...mapGetters({
-            list: 'getRecipes',
-            index: 'getIndex'
-        })
-    },
-    methods: {
-        ...mapActions(['addRecipe', 'setIndex']),
-        async addRecipeAndFocus() {
-            await this.addRecipe();
-            this.setSelectedRecipe(0);
-        },
-        setSelectedRecipe(i) {
-            this.setIndex(i);
+    props: {
+        recipes: {
+            type: Array,
+            default: []
         }
     },
     data() {
         return {
-            selectedRecipe: {},
-            selectedIndex: 0
+            selectedRecipe: null
         }
     },
-    created() {
-        if(this.list.length != 0) {
-            this.setSelectedRecipe(0);
+    methods: {
+        setRecipe(recipe) {
+            this.selectedRecipe = recipe;
+            this.$emit('selected-recipe', recipe);
+        },
+        isSelected(id) {
+            return id === this.$route.params.id;
         }
     }
 }

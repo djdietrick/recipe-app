@@ -1,6 +1,6 @@
 <template>
     <q-layout container view="lHh lpR fFf" class="recipes">
-        <q-drawer show-if-above bordered class="recipes__list">
+        <!-- <q-drawer show-if-above bordered class="recipes__list">
             <q-toolbar class="q-pa-md recipes__list__toolbar">
                 <q-input dense outlined placeholder="Search"></q-input>
                 <q-space></q-space>
@@ -15,7 +15,9 @@
                     </q-item>
                 </q-list>
             </q-scroll-area>
-        </q-drawer>
+        </q-drawer> -->
+        <RecipeList :recipes="recipes" @selected-recipe="setRecipe" 
+            @add-recipe="addRecipeAndFocus"/>
 
         <q-page-container>
             <router-view :key="$route.fullPath"/>
