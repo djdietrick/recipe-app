@@ -30,7 +30,7 @@
   },
   "exclude": [
     "dist",
-    ".quasar",
+    "../.quasar",
     "node_modules"
   ]
 }
