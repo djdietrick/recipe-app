@@ -141,6 +141,8 @@ export default {
     },
     created() {
         this.update();
+        if(this.$route.query.new)
+            this.editing = true
     },
     destroyed() {
         if(this.editing) {

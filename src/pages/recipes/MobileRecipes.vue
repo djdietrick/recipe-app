@@ -35,7 +35,8 @@ export default {
         addRecipeAndFocus() {
             this.addRecipe().then(id => {
                 this.$router.push({
-                    params: {id}
+                    params: {id},
+                    query: {new: true}
                 })
             })
         }
