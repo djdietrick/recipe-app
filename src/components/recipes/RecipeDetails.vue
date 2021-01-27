@@ -1,25 +1,35 @@
 <template>
-    <div class="recipe__details q-pl-lg">
+    <div class="recipe__details">
         <q-scroll-area class="fit">
+            <div class="q-px-md">
             <div class="recipe__details__header row justify-between q-py-md">
             <q-input class="recipe__details__header__input" v-if="editing" v-model="recipe.title"></q-input>
             <h4 v-else class="q-my-sm">{{recipe.title}}</h4>
 
-            <q-btn flat :ripple="false" icon="more_vert">
+            <q-btn v-if="!editing" flat :ripple="false" icon="more_vert" class="recipe__details__menu">
                 <q-menu auto-close anchor="bottom right" self="top right">
                     <q-list dense>
-                        <q-item clickable>
-                            <q-item-section class="q-pa-md recipe__details__menu__item" @click="editing=!editing">
+                        <q-item clickable @click="editing=!editing">
+                            <q-item-section class="q-py-md recipe__details__menu__item">
                                 <q-icon name="edit" />
                             </q-item-section>
+                            <q-item-section>
+                                Edit
+                            </q-item-section>
                         </q-item>
-                        <q-item clickable>
-                            <q-item-section class="q-pa-md recipe__details__menu__item">
-                                <q-icon name="delete" @click="deleteRecipe"/>
+                        <q-item clickable @click="deleteRecipe">
+                            <q-item-section class="q-py-md recipe__details__menu__item">
+                                <q-icon name="delete" />
+                            </q-item-section>
+                            <q-item-section class="q-mr-sm">
+                                Delete
                             </q-item-section>
                         </q-item>
                     </q-list>
                 </q-menu>
+            </q-btn>
+            <q-btn v-else class="recipe__details__menu" @click="editing = false" color="primary">
+                Save
             </q-btn>
 
         </div>
@@ -48,6 +58,7 @@
                 <Direction :key="i" :direction="direction" :i="i" @update:direction="recipe.directions[i] = $event" :editing="editing" />
                 <q-btn flat clickable v-if="editing" icon="close" size="sm" color="primary" class="direction__delete" @click="deleteDirection(i)"/>
             </div>
+        </div>
         </div>
         </q-scroll-area>
         
@@ -170,12 +181,21 @@ export default {
 .recipe__details {
     &__header input {
         font-size: 2rem;
-        max-width: 75vw;
+        max-width: 65vw;
     }
 
-    &__menu__item {
-        display: flex;
+    &__menu {
+        @media(min-width: $breakpoint-md-max) {
+            margin-right: 2rem;
+        }
+        margin-right: 1rem;
+
+        &__item {
+            display: flex;
+            align-items: center;
+        }
     }
+
     height: 93vh;
 }
 

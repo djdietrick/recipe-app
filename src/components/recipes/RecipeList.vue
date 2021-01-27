@@ -2,14 +2,14 @@
     <div class="recipes__list">
         <q-toolbar class="q-pa-md recipes__list__toolbar">
             <q-input dense outlined clearable placeholder="Search" v-model="search"></q-input>
-            <q-space></q-space>
-            <q-btn round color="primary" icon="control_point" size="sm" @click="$emit('add-recipe')" />
+            <!-- <q-space></q-space> -->
+            <q-btn flat color="primary" icon="add" size="md" @click="$emit('add-recipe')" />
         </q-toolbar>
         <div class="recipes__list__container">
             <!-- <q-scroll-area class="fit"> -->
             <q-list bordered separator>
                 <q-item clickable v-ripple v-for="recipe in filteredRecipes" :key="recipe.id"
-                    :active="isSelected(recipe.id)" active-class="bg-blue-7 text-white"
+                    :active="isSelected(recipe.id)" active-class="bg-primary text-white"
                     @click="setRecipe(recipe)">
                     <q-item-section>{{recipe.title}}</q-item-section>
                 </q-item>
@@ -60,6 +60,12 @@ export default {
 </script>
 
 <style lang="scss">
+
+.recipes__list__toolbar {
+    display: grid;
+    grid-template-columns: 1fr 2rem;
+    grid-gap: 1rem;
+}
 
 .recipes__list__container {
     height: 100%;

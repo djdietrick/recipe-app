@@ -29,7 +29,7 @@
             <q-item-section>
               <q-icon name="receipt_long" />
             </q-item-section>
-            <q-item-section>
+            <q-item-section @click="$router.push('/lists')">
               Lists
             </q-item-section>
           </q-item>
@@ -66,8 +66,6 @@
 </template>
 
 <script>
-import Recipes from '../pages/Recipes.vue';
-import Lists from '../pages/Lists.vue';
 import {mapActions} from 'vuex';
 
 export default {
@@ -78,10 +76,6 @@ export default {
       drawer: false,
       dark: false
     }
-  },
-  components: {
-    'recipes': Recipes,
-    'lists': Lists
   },
   watch: {
     dark: function(val) {

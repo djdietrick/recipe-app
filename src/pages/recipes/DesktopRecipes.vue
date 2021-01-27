@@ -6,7 +6,7 @@
         </q-drawer>
 
         <q-page-container>
-            <RecipeDetails v-if="$route.params.id" :id="$route.params.id" />
+            <RecipeDetails v-if="$route.params.id" :id="$route.params.id" :key="$route.params.id" />
             <NoRecipe v-else />
         </q-page-container>
     </q-layout>

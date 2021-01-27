@@ -61,6 +61,10 @@ export default {
         grid-template-columns: 2fr 1fr 1fr;
         grid-gap: 5%;
     }
+
+    p {
+        margin-bottom: 0.5rem;
+    }
 }    
 
 </style>

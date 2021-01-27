@@ -5,7 +5,7 @@
   },
   "hosting": {
     "target": "recipes",
-    "public": "dist",
+    "public": "dist/spa",
     "ignore": [
       "firebase.json",
       "**/.*",

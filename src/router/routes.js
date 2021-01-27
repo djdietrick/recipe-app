@@ -12,14 +12,10 @@ const routes = [
       { 
         path: 'recipes/:id?', 
         component: () => import('pages/recipes/BaseRecipes.vue'),
-        // children: [
-        //   {
-        //     path: ':id',
-        //     name: 'RecipeDetails',
-        //     component: () => import('components/recipes/RecipeDetails.vue'),
-        //     props: route => ({id: route.params.id})
-        //   }
-        // ]  
+      },
+      {
+        path: 'lists/:id?',
+        component: () => import('pages/lists/BaseLists.vue')
       }
     ]
   },
