@@ -71,4 +71,8 @@ export default {
     width: 98vw;
 }
 
+.q-layout--containerized {
+    height: 93vh;
+}
+
 </style>
