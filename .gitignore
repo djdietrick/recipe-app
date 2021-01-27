@@ -32,4 +32,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 
+.env.local
+.env.*.local
+
 .quasar.env.json
