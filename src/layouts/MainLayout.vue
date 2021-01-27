@@ -2,7 +2,8 @@
   <q-layout view="lHh Lpr lFf" class="main-layout">
     <q-header elevated>
       <q-toolbar>
-        <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
+        <q-btn v-if="!back" flat @click="drawer = !drawer" round dense icon="menu" />
+        <q-btn v-else flat @click="$router.go(-1)" round dense icon="arrow_back_ios" />
         <q-toolbar-title>
           Recipe Keeper
         </q-toolbar-title>
@@ -87,6 +88,13 @@ export default {
     async onLogout() {
       await this.logout();
       this.$router.push('/auth');
+    }
+  },
+  computed: {
+    back() {
+      if(this.$route.params.id && window.matchMedia('(max-width: 767px)').matches) 
+        return true;
+      return false;
     }
   }
 }
