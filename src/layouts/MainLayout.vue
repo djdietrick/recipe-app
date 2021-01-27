@@ -2,8 +2,10 @@
   <q-layout view="lHh Lpr lFf" class="main-layout">
     <q-header elevated>
       <q-toolbar>
-        <q-btn v-if="!back" flat @click="drawer = !drawer" round dense icon="menu" />
-        <q-btn v-else flat @click="$router.go(-1)" round dense icon="arrow_back_ios" />
+        <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+          <q-btn v-if="!back" key="notBack" flat @click="drawer = !drawer" round dense icon="menu" />
+          <q-btn v-if="back" key="back" flat @click="$router.go(-1)" round dense icon="arrow_back_ios" />
+        </transition>
         <q-toolbar-title>
           Recipe Keeper
         </q-toolbar-title>
@@ -21,7 +23,7 @@
             <q-item-section>
               <q-icon name="local_dining" />
             </q-item-section>
-            <q-item-section @click="$router.push('/recipes')">
+            <q-item-section @click="navTo('/recipes')">
               Recipes
             </q-item-section>
           </q-item>
@@ -30,7 +32,7 @@
             <q-item-section>
               <q-icon name="receipt_long" />
             </q-item-section>
-            <q-item-section @click="$router.push('/lists')">
+            <q-item-section @click="navTo('/lists')">
               Lists
             </q-item-section>
           </q-item>
@@ -87,6 +89,9 @@ export default {
     async onLogout() {
       await this.logout();
       this.$router.push('/auth');
+    },
+    navTo(url) {
+      this.$router.push(url).catch(e => {})
     }
   },
   computed: {

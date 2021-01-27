@@ -1,8 +1,12 @@
 <template>
     <div class="recipes--mobile">
-        <RecipeList v-if="!$route.params.id" :recipes="recipes" @selected-recipe="setRecipe" 
-            @add-recipe="addRecipeAndFocus"/>
-        <RecipeDetails v-else :id="$route.params.id" />
+        <transition mode="out-in" :duration="150"
+            :enter-active-class="$route.params.id ? 'animated slideInRight' : 'animated slideInLeft'" 
+            :leave-active-class="$route.params.id ? 'animated slideOutLeft' : 'animated slideOutRight'" >
+            <RecipeList v-if="!$route.params.id" :recipes="recipes" @selected-recipe="setRecipe" 
+                @add-recipe="addRecipeAndFocus" key="list"/>
+            <RecipeDetails v-if="$route.params.id" :id="$route.params.id" key="details"/>
+        </transition>
     </div>
 </template>
 
@@ -41,3 +45,7 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+    
+</style>
