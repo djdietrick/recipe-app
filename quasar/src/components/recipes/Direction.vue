@@ -50,7 +50,8 @@ export default {
 <style lang="scss">
 
 .direction {
-    display: flex;
+    display: grid;
+    grid-template-columns: 2rem 1fr;
     &__number {
         margin-top: 1rem;
     }
@@ -58,7 +59,10 @@ export default {
         margin-top: 1rem;
     }
     &__form {
-        width: 65vw;
+        @media (max-width: $breakpoint-md-max) {
+            width: 72vw;
+        }
+        width: 60vw;
     }
 }
 

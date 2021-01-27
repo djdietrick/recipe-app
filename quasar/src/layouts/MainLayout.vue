@@ -20,7 +20,7 @@
             <q-item-section>
               <q-icon name="local_dining" />
             </q-item-section>
-            <q-item-section>
+            <q-item-section @click="$router.push('/recipes')">
               Recipes
             </q-item-section>
           </q-item>

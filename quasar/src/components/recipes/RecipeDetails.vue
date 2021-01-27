@@ -1,11 +1,12 @@
 <template>
-    <div class="recipe__details q-px-lg">
-        <div class="recipe__details__header row justify-between q-py-md">
-            <q-input v-if="editing" v-model="recipe.title"></q-input>
+    <div class="recipe__details q-pl-lg">
+        <q-scroll-area class="fit">
+            <div class="recipe__details__header row justify-between q-py-md">
+            <q-input class="recipe__details__header__input" v-if="editing" v-model="recipe.title"></q-input>
             <h4 v-else class="q-my-sm">{{recipe.title}}</h4>
 
             <q-btn flat :ripple="false" icon="more_vert">
-                <q-menu anchor="bottom right" self="top right">
+                <q-menu auto-close anchor="bottom right" self="top right">
                     <q-list dense>
                         <q-item clickable>
                             <q-item-section class="q-pa-md recipe__details__menu__item" @click="editing=!editing">
@@ -23,31 +24,33 @@
 
         </div>
 
-        <q-separator inset />
+        <q-separator />
 
         <div class="recipe__details__ingredients q-my-md">
             <div class="row">
                 <h5 class="q-my-md">Ingredients</h5>
-                <q-btn flat v-if="editing" icon="add" class="q-ml-xl" @click="addBlankIngredient"/>
+                <q-btn outline v-if="editing" icon="add" class="q-ml-xl ingredient__add" color="primary" @click="addBlankIngredient"/>
             </div>
             <div class="ingredient__container" v-for="(ingredient, i) in recipe.ingredients" :key="i">
                 <Ingredient :ingredient="ingredient" :editing="editing"/>
-                <q-btn flat clickable v-if="editing" icon="close" size="sm" class="ingredient__delete" @click="deleteIngredient(i)"/>
+                <q-btn flat clickable v-if="editing" icon="close" size="sm" color="primary" class="ingredient__delete" @click="deleteIngredient(i)"/>
             </div>
         </div>
 
-        <q-separator inset />
+        <q-separator />
 
         <div class="recipe__details__directions">
             <div class="row">
                 <h5 class="q-my-md">Directions</h5>
-                <q-btn flat v-if="editing" icon="add" class="q-ml-xl" @click="addBlankDirection"/>
+                <q-btn outline v-if="editing" icon="add" class="q-ml-xl direction__add" color="primary" @click="addBlankDirection"/>
             </div>
             <div v-for="(direction, i) in recipe.directions" :key="i + direction" class="direction__container q-mb-sm">
                 <Direction :key="i" :direction="direction" :i="i" @update:direction="recipe.directions[i] = $event" :editing="editing" />
-                <q-btn flat clickable v-if="editing" icon="close" size="sm" class="ingredient__delete q-ml-sm" @click="deleteDirection(i)"/>
+                <q-btn flat clickable v-if="editing" icon="close" size="sm" color="primary" class="direction__delete" @click="deleteDirection(i)"/>
             </div>
         </div>
+        </q-scroll-area>
+        
     </div>
 </template>
 
@@ -108,6 +111,9 @@ export default {
                 }
             }).onOk(() => {
                 this.delRecipe(this.recipe.id);
+                this.$router.push({
+                    params: {id: undefined}
+                })
             })
         }
     },
@@ -140,17 +146,31 @@ export default {
         display: flex;
         align-items: center;
     }
+    &:not(:last-child) {
+        margin-bottom: 1rem;
+    }
+    &__add {
+        align-self: center;
+    }
+    &__delete {
+        align-self: center;
+        
+    }
 }
 
 .direction {
     &__container {
         display: flex;
     }
+    &__add {
+        align-self: center;
+    }
 }
 
 .recipe__details {
     &__header input {
         font-size: 2rem;
+        max-width: 75vw;
     }
 
     &__menu__item {

@@ -10,21 +10,16 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { 
-        path: 'recipes', 
-        component: () => import('pages/Recipes.vue'),
-        children: [
-          {
-            path: ':id',
-            name: 'RecipeDetails',
-            component: () => import('components/recipes/RecipeDetails.vue'),
-            props: route => ({id: route.params.id})
-          },
-          {
-            path: '',
-            name: 'NoRecipe',
-            component: () => import('components/recipes/NoRecipe.vue')
-          }
-        ]  
+        path: 'recipes/:id?', 
+        component: () => import('pages/recipes/BaseRecipes.vue'),
+        // children: [
+        //   {
+        //     path: ':id',
+        //     name: 'RecipeDetails',
+        //     component: () => import('components/recipes/RecipeDetails.vue'),
+        //     props: route => ({id: route.params.id})
+        //   }
+        // ]  
       }
     ]
   },
