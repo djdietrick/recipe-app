@@ -41,7 +41,7 @@
             <q-item-section>
               <q-icon name="model_training" />
             </q-item-section>
-            <q-item-section @click="dark = !dark">
+            <q-item-section @click="toggleDark">
               Switch to {{dark ? 'Light Mode' : 'Dark Mode'}}
             </q-item-section>
           </q-item>
@@ -67,15 +67,14 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 
 export default {
   name: 'MainLayout',
   data () {
     return {
       selectedComponent: 'recipes',
-      drawer: false,
-      dark: false
+      drawer: false
     }
   },
   watch: {
@@ -84,18 +83,25 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions(['logout', 'toggleDark']),
     async onLogout() {
       await this.logout();
       this.$router.push('/auth');
     }
   },
   computed: {
+    ...mapGetters({
+      user: 'getUser',
+      dark: 'getDark'
+    }),
     back() {
       if(this.$route.params.id && window.matchMedia('(max-width: 767px)').matches) 
         return true;
       return false;
     }
+  },
+  created() {
+    this.$q.dark.set(this.user.dark);
   }
 }
 </script>
