@@ -39,7 +39,7 @@ const actions = {
         auth().signOut().then(() => { commit('removeUser') });
     },
     async toggleDark({commit, state}) {
-        await db().collection('users').doc(state.user.userId).set({
+        await db().collection('users').doc(state.user.userId).update({
             dark: !state.user.dark
         });
         commit('setDark', !state.user.dark);
