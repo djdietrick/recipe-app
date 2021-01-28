@@ -50,6 +50,15 @@
 
           <q-item clickable>
             <q-item-section>
+              <q-icon name="feedback" />
+            </q-item-section>
+            <q-item-section @click="feedback">
+              Submit Feedback :)
+            </q-item-section>
+          </q-item>
+
+          <q-item clickable>
+            <q-item-section>
               <q-icon name="exit_to_app" />
             </q-item-section>
             <q-item-section @click="onLogout">
@@ -85,13 +94,26 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['logout', 'toggleDark']),
+    ...mapActions(['logout', 'toggleDark', 'submitFeedback']),
     async onLogout() {
       await this.logout();
       this.$router.push('/auth');
     },
     navTo(url) {
       this.$router.push(url).catch(e => {})
+    },
+    feedback() {
+      this.$q.dialog({
+        title: 'Feedback',
+        message: 'Any feedback is helpful! What do you like? What do you hate?',
+        prompt: {
+          model: '',
+          type: 'text'
+        },
+        cancel: true
+      }).onOk(data => {
+        this.submitFeedback(data);
+      })
     }
   },
   computed: {

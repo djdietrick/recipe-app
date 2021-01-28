@@ -16,6 +16,9 @@ Vue.use(Vuex)
  * with the Store instance.
  */
 
+import {v4 as uuidv4} from 'uuid';
+import { db } from 'src/services/firebase';
+
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     state: {
@@ -28,7 +31,16 @@ export default function (/* { ssrContext } */) {
       ...auth.mutations
     },
     actions: {
-      ...auth.actions
+      ...auth.actions,
+      async submitFeedback({}, feedback) {
+        let f = {
+          id: uuidv4(),
+          message: feedback,
+          read: false
+        }
+
+        await db().collection('feedback').doc(f.id).set(f);
+      }
     },
     modules: {
       recipes,
