@@ -10,12 +10,17 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { 
+        name: 'recipes',
         path: 'recipes/:id?', 
         component: () => import('pages/recipes/BaseRecipes.vue'),
       },
       {
         path: 'lists/:id?',
         component: () => import('pages/lists/BaseLists.vue')
+      },
+      {
+        path: '/',
+        redirect: {name: 'recipes'}
       }
     ]
   },
