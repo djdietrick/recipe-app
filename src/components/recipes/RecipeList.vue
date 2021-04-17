@@ -49,10 +49,17 @@ export default {
             if(!this.search || this.search.length === 0) return this.recipes;
             return this.recipes.filter(recipe => {
                 for(let ingredient of recipe.ingredients) {
-                    if(ingredient.name.indexOf(this.search) >= 0)
+                    if(ingredient.name.indexOf(this.search.toLowerCase()) >= 0)
                         return true;
                 }
-                return recipe.title.toLowerCase().indexOf(this.search) >= 0;
+                if(recipe.tags) {
+                    for(let tag of recipe.tags) {
+                        if(tag.indexOf(this.search.toLowerCase()) >= 0)
+                            return true; 
+                    }
+                }
+                
+                return recipe.title.toLowerCase().indexOf(this.search.toLowerCase()) >= 0;
             })
         }
     }

@@ -42,7 +42,7 @@
                 <q-btn outline v-if="editing" icon="add" class="q-ml-xl ingredient__add" color="primary" @click="addBlankIngredient"/>
             </div>
             <div class="ingredient__container" v-for="(ingredient, i) in recipe.ingredients" :key="i">
-                <Ingredient :ingredient="ingredient" :editing="editing"/>
+                <Ingredient :ingredient="ingredient" :editing="editing" @focused="focused = i"/>
                 <q-btn flat clickable v-if="editing" icon="close" size="sm" color="primary" class="ingredient__delete" @click="deleteIngredient(i)"/>
             </div>
         </div>
@@ -59,6 +59,31 @@
                 <q-btn flat clickable v-if="editing" icon="close" size="sm" color="primary" class="direction__delete" @click="deleteDirection(i)"/>
             </div>
         </div>
+
+        <q-separator />
+
+        <div class="recipe__details__tags q-pb-lg">
+            <div class="row">
+                <h5 class="q-my-md">Tags</h5>
+            </div>
+            <div class="row" v-if="editing">
+                <q-form @submit.prevent="addTag">
+                <q-input outlined type="text" class="form__input newtag" v-model="newTag" 
+                    placeholder="New Tag">
+                    <template v-slot:hint>
+                        Press enter to add
+                    </template>
+                </q-input>
+                </q-form>
+            </div>
+            <div class="tags q-mt-md">
+                <div v-for="tag in recipe.tags" :key="tag">
+                    <q-chip size="md" outline color="primary" v-if="!editing">{{tag[0].toUpperCase() + tag.slice(1)}}</q-chip>
+                    <q-chip size="md" outline removable @remove="removeTag(tag)" color="primary" v-else>{{tag[0].toUpperCase() + tag.slice(1)}}</q-chip>
+                </div>
+            </div>
+        </div>
+
         </div>
         </q-scroll-area>
         
@@ -78,7 +103,9 @@ export default {
     data() {
         return {
             recipe: {},
-            editing: false
+            newTag: '',
+            editing: false,
+            focused: -1
         }
     },
     components: {
@@ -99,6 +126,11 @@ export default {
                 qty: '',
                 unit: ''
             })
+        },
+        onReturn() {
+            if(this.editing && this.focused == this.recipe.ingredients.length - 1) {
+                this.addBlankIngredient();
+            }
         },
         deleteIngredient(i) {
             this.recipe.ingredients.splice(i, 1);
@@ -126,6 +158,27 @@ export default {
                     params: {id: undefined}
                 })
             })
+        },
+        addTag(e = null) {
+            if (e) e.preventDefault();
+            if (this.newTag.length > 0) {
+                this.newTag = this.newTag.toLowerCase();
+                if(!this.recipe.tags) 
+                    this.recipe.tags = [];
+                if (!this.recipe.tags.includes(this.newTag)) {
+                    this.recipe.tags.push(this.newTag);
+                }
+                this.newTag = '';
+                this.updateRecipe(this.recipe);
+            }
+        },
+        removeTag(tag) {
+            if (!this.recipe.tags) return;
+            let index = this.recipe.tags.indexOf(tag);
+            if (index >= 0) {
+                this.recipe.tags.splice(index,1);
+            }
+            this.updateRecipe(this.recipe);
         }
     },
     watch: {
@@ -143,6 +196,10 @@ export default {
         this.update();
         if(this.$route.query.new)
             this.editing = true
+        window.addEventListener('keydown', (e) => {
+            if(e.key == "Enter")
+                this.onReturn();
+        })
     },
     destroyed() {
         if(this.editing) {
@@ -207,5 +264,8 @@ export default {
     height: 93vh;
 }
 
+.tags {
+    display: flex;
+}
 
 </style>
