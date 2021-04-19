@@ -118,6 +118,7 @@ module.exports = function (/* ctx */) {
       workboxOptions: {}, // only for GenerateSW
       manifest: {
         name: `Justadash`,
+        version: 0.2,
         short_name: `Justadash`,
         description: `Justadash`,
         display: 'standalone',

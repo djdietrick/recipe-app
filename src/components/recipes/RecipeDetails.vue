@@ -36,19 +36,6 @@
 
         <q-separator />
 
-        <div class="recipe__details__tags">
-            <q-chip square v-for="tag in recipe.tags" :key="tag" class="recipe__details__tag">{{tag}}</q-chip>
-
-            <q-btn v-if="editing" outline color="primary" :ripple="false" icon="add" class="recipe__details__tags__add"> 
-                <q-menu class="recipes__details__tags__menu" anchor="bottom right" self="top right">
-                    <q-form class="q-pa-md" @submit="addTag">
-                        <q-input label="New Tag" v-model="newTag" lazy-rules :rules="[val => val && val.length > 0 || 'Please add a new tag']" />
-                        <q-btn label="Add" type="submit" color="primary" />
-                    </q-form>
-                </q-menu>
-            </q-btn>
-        </div>
-
         <div class="recipe__details__ingredients q-my-md">
             <div class="row">
                 <h5 class="q-my-md">Ingredients</h5>
