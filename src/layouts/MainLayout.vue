@@ -2,9 +2,12 @@
   <q-layout view="lHh Lpr lFf" class="main-layout">
     <q-header elevated>
       <q-toolbar>
-        <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
+        <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in">
+          <q-btn v-if="!back" key="notBack" flat @click="drawer = !drawer" round dense icon="menu" />
+          <q-btn v-if="back" key="back" flat @click="$router.go(-1)" round dense icon="arrow_back_ios" />
+        </transition>
         <q-toolbar-title>
-          Recipe Keeper
+          Justadash
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -20,7 +23,7 @@
             <q-item-section>
               <q-icon name="local_dining" />
             </q-item-section>
-            <q-item-section @click="$router.push('/recipes')">
+            <q-item-section @click="navTo('/recipes')">
               Recipes
             </q-item-section>
           </q-item>
@@ -29,7 +32,7 @@
             <q-item-section>
               <q-icon name="receipt_long" />
             </q-item-section>
-            <q-item-section>
+            <q-item-section @click="navTo('/lists')">
               Lists
             </q-item-section>
           </q-item>
@@ -40,8 +43,26 @@
             <q-item-section>
               <q-icon name="model_training" />
             </q-item-section>
-            <q-item-section @click="dark = !dark">
+            <q-item-section @click="toggleDark">
               Switch to {{dark ? 'Light Mode' : 'Dark Mode'}}
+            </q-item-section>
+          </q-item>
+
+          <q-item clickable>
+            <q-item-section>
+              <q-icon name="feedback" />
+            </q-item-section>
+            <q-item-section @click="feedback">
+              Submit Feedback :)
+            </q-item-section>
+          </q-item>
+
+          <q-item clickable>
+            <q-item-section>
+              <q-icon name="get_app" />
+            </q-item-section>
+            <q-item-section @click="download">
+              Download App
             </q-item-section>
           </q-item>
 
@@ -66,22 +87,23 @@
 </template>
 
 <script>
-import Recipes from '../pages/Recipes.vue';
-import Lists from '../pages/Lists.vue';
-import {mapActions} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  
+})
 
 export default {
   name: 'MainLayout',
   data () {
     return {
       selectedComponent: 'recipes',
-      drawer: false,
-      dark: false
+      drawer: false
     }
-  },
-  components: {
-    'recipes': Recipes,
-    'lists': Lists
   },
   watch: {
     dark: function(val) {
@@ -89,15 +111,52 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions(['logout', 'toggleDark', 'submitFeedback']),
     async onLogout() {
       await this.logout();
       this.$router.push('/auth');
+    },
+    navTo(url) {
+      this.$router.push(url).catch(e => {})
+    },
+    feedback() {
+      this.$q.dialog({
+        title: 'Feedback',
+        message: 'Any feedback is helpful! What do you like? What do you hate?',
+        prompt: {
+          model: '',
+          type: 'text'
+        },
+        cancel: true
+      }).onOk(data => {
+        this.submitFeedback(data);
+      })
+    },
+    download() {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((res) => {
+        console.log(res);
+      })
     }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'getUser',
+      dark: 'getDark'
+    }),
+    back() {
+      if(this.$route.params.id && window.matchMedia('(max-width: 767px)').matches) 
+        return true;
+      return false;
+    }
+  },
+  created() {
+    this.$q.dark.set(this.user.dark);
   }
 }
 </script>
 
 <style lang="scss">
+
 
 </style>

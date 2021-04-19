@@ -1,30 +1,53 @@
 <template>
-    <div class="recipe__details q-pl-lg">
+    <div class="recipe__details">
         <q-scroll-area class="fit">
+            <div class="q-px-md">
             <div class="recipe__details__header row justify-between q-py-md">
-            <q-input class="recipe__details__header__input" v-if="editing" v-model="recipe.title"></q-input>
-            <h4 v-else class="q-my-sm">{{recipe.title}}</h4>
+                <q-input class="recipe__details__header__input" v-if="editing" v-model="recipe.title"></q-input>
+                <h4 v-else class="q-my-sm">{{recipe.title}}</h4>
 
-            <q-btn flat :ripple="false" icon="more_vert">
-                <q-menu auto-close anchor="bottom right" self="top right">
-                    <q-list dense>
-                        <q-item clickable>
-                            <q-item-section class="q-pa-md recipe__details__menu__item" @click="editing=!editing">
-                                <q-icon name="edit" />
-                            </q-item-section>
-                        </q-item>
-                        <q-item clickable>
-                            <q-item-section class="q-pa-md recipe__details__menu__item">
-                                <q-icon name="delete" @click="deleteRecipe"/>
-                            </q-item-section>
-                        </q-item>
-                    </q-list>
-                </q-menu>
-            </q-btn>
+                <q-btn v-if="!editing" flat :ripple="false" icon="more_vert" class="recipe__details__menu">
+                    <q-menu auto-close anchor="bottom right" self="top right">
+                        <q-list dense>
+                            <q-item clickable @click="editing=!editing">
+                                <q-item-section class="q-py-md recipe__details__menu__item">
+                                    <q-icon name="edit" />
+                                </q-item-section>
+                                <q-item-section>
+                                    Edit
+                                </q-item-section>
+                            </q-item>
+                            <q-item clickable @click="deleteRecipe">
+                                <q-item-section class="q-py-md recipe__details__menu__item">
+                                    <q-icon name="delete" />
+                                </q-item-section>
+                                <q-item-section class="q-mr-sm">
+                                    Delete
+                                </q-item-section>
+                            </q-item>
+                        </q-list>
+                    </q-menu>
+                </q-btn>
+                <q-btn v-else class="recipe__details__menu" @click="editing = false" color="primary">
+                    Save
+                </q-btn>
 
-        </div>
+            </div>
 
         <q-separator />
+
+        <div class="recipe__details__tags">
+            <q-chip square v-for="tag in recipe.tags" :key="tag" class="recipe__details__tag">{{tag}}</q-chip>
+
+            <q-btn v-if="editing" outline color="primary" :ripple="false" icon="add" class="recipe__details__tags__add"> 
+                <q-menu class="recipes__details__tags__menu" anchor="bottom right" self="top right">
+                    <q-form class="q-pa-md" @submit="addTag">
+                        <q-input label="New Tag" v-model="newTag" lazy-rules :rules="[val => val && val.length > 0 || 'Please add a new tag']" />
+                        <q-btn label="Add" type="submit" color="primary" />
+                    </q-form>
+                </q-menu>
+            </q-btn>
+        </div>
 
         <div class="recipe__details__ingredients q-my-md">
             <div class="row">
@@ -32,7 +55,7 @@
                 <q-btn outline v-if="editing" icon="add" class="q-ml-xl ingredient__add" color="primary" @click="addBlankIngredient"/>
             </div>
             <div class="ingredient__container" v-for="(ingredient, i) in recipe.ingredients" :key="i">
-                <Ingredient :ingredient="ingredient" :editing="editing"/>
+                <Ingredient :ingredient="ingredient" :editing="editing" @focused="focused = i"/>
                 <q-btn flat clickable v-if="editing" icon="close" size="sm" color="primary" class="ingredient__delete" @click="deleteIngredient(i)"/>
             </div>
         </div>
@@ -48,6 +71,32 @@
                 <Direction :key="i" :direction="direction" :i="i" @update:direction="recipe.directions[i] = $event" :editing="editing" />
                 <q-btn flat clickable v-if="editing" icon="close" size="sm" color="primary" class="direction__delete" @click="deleteDirection(i)"/>
             </div>
+        </div>
+
+        <q-separator />
+
+        <div class="recipe__details__tags q-pb-lg">
+            <div class="row">
+                <h5 class="q-my-md">Tags</h5>
+            </div>
+            <div class="row" v-if="editing">
+                <q-form @submit.prevent="addTag">
+                <q-input outlined type="text" class="form__input newtag" v-model="newTag" 
+                    placeholder="New Tag">
+                    <template v-slot:hint>
+                        Press enter to add
+                    </template>
+                </q-input>
+                </q-form>
+            </div>
+            <div class="tags q-mt-md">
+                <div v-for="tag in recipe.tags" :key="tag">
+                    <q-chip size="md" outline color="primary" v-if="!editing">{{tag[0].toUpperCase() + tag.slice(1)}}</q-chip>
+                    <q-chip size="md" outline removable @remove="removeTag(tag)" color="primary" v-else>{{tag[0].toUpperCase() + tag.slice(1)}}</q-chip>
+                </div>
+            </div>
+        </div>
+
         </div>
         </q-scroll-area>
         
@@ -67,7 +116,10 @@ export default {
     data() {
         return {
             recipe: {},
-            editing: false
+            newTag: '',
+            editing: false,
+            focused: -1,
+            newTag: ''
         }
     },
     components: {
@@ -88,6 +140,11 @@ export default {
                 qty: '',
                 unit: ''
             })
+        },
+        onReturn() {
+            if(this.editing && this.focused == this.recipe.ingredients.length - 1) {
+                this.addBlankIngredient();
+            }
         },
         deleteIngredient(i) {
             this.recipe.ingredients.splice(i, 1);
@@ -115,6 +172,27 @@ export default {
                     params: {id: undefined}
                 })
             })
+        },
+        addTag(e = null) {
+            if (e) e.preventDefault();
+            if (this.newTag.length > 0) {
+                this.newTag = this.newTag.toLowerCase();
+                if(!this.recipe.tags) 
+                    this.recipe.tags = [];
+                if (!this.recipe.tags.includes(this.newTag)) {
+                    this.recipe.tags.push(this.newTag);
+                }
+                this.newTag = '';
+                this.updateRecipe(this.recipe);
+            }
+        },
+        removeTag(tag) {
+            if (!this.recipe.tags) return;
+            let index = this.recipe.tags.indexOf(tag);
+            if (index >= 0) {
+                this.recipe.tags.splice(index,1);
+            }
+            this.updateRecipe(this.recipe);
         }
     },
     watch: {
@@ -130,6 +208,12 @@ export default {
     },
     created() {
         this.update();
+        if(this.$route.query.new)
+            this.editing = true
+        window.addEventListener('keydown', (e) => {
+            if(e.key == "Enter")
+                this.onReturn();
+        })
     },
     destroyed() {
         if(this.editing) {
@@ -170,14 +254,41 @@ export default {
 .recipe__details {
     &__header input {
         font-size: 2rem;
-        max-width: 75vw;
+        max-width: 65vw;
     }
 
-    &__menu__item {
-        display: flex;
+    &__header {
+        display: grid;
+        grid-template-columns: 1fr min-content;
+        grid-gap: 1rem;
     }
+
+    &__menu {
+        @media(min-width: $breakpoint-md-max) {
+            margin-right: 2rem;
+        }
+        margin-right: 1rem;
+
+        &__item {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &__tags {
+        display: flex;
+        align-items: center;
+
+        &__add {
+            justify-self: right;
+        }
+    }
+
     height: 93vh;
 }
 
+.tags {
+    display: flex;
+}
 
 </style>

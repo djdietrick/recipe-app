@@ -5,7 +5,10 @@ import auth from './modules/auth';
 import recipes from './modules/recipes';
 import lists from './modules/lists';
 
+import VuePwaInstallPlugin from 'vue-pwa-install';
+
 Vue.use(Vuex)
+Vue.use(VuePwaInstallPlugin);
 
 /*
  * If not building with SSR mode, you can
@@ -15,6 +18,9 @@ Vue.use(Vuex)
  * async/await or return a Promise which resolves
  * with the Store instance.
  */
+
+import {v4 as uuidv4} from 'uuid';
+import { db } from 'src/services/firebase';
 
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
@@ -28,7 +34,16 @@ export default function (/* { ssrContext } */) {
       ...auth.mutations
     },
     actions: {
-      ...auth.actions
+      ...auth.actions,
+      async submitFeedback({}, feedback) {
+        let f = {
+          id: uuidv4(),
+          message: feedback,
+          read: false
+        }
+
+        await db().collection('feedback').doc(f.id).set(f);
+      }
     },
     modules: {
       recipes,

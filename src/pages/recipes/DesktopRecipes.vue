@@ -6,7 +6,7 @@
         </q-drawer>
 
         <q-page-container>
-            <RecipeDetails v-if="$route.params.id" :id="$route.params.id" />
+            <RecipeDetails v-if="$route.params.id" :id="$route.params.id" :key="$route.params.id" />
             <NoRecipe v-else />
         </q-page-container>
     </q-layout>
@@ -46,7 +46,8 @@ export default {
         addRecipeAndFocus() {
             this.addRecipe().then(id => {
                 this.$router.push({
-                    params: {id}
+                    params: {id},
+                    query: {new: true}
                 })
             })
         }
@@ -69,6 +70,10 @@ export default {
 .recipes--desktop {
     height: 93vh;
     width: 98vw;
+}
+
+.q-layout--containerized {
+    height: 93vh;
 }
 
 </style>

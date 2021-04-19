@@ -6,20 +6,26 @@ const routes = [
     component: () => import('pages/Auth.vue')
   },
   {
+    path: '/install',
+    name: 'Install',
+    component: () => import('pages/Install.vue')
+  },
+  {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { 
+        name: 'recipes',
         path: 'recipes/:id?', 
         component: () => import('pages/recipes/BaseRecipes.vue'),
-        // children: [
-        //   {
-        //     path: ':id',
-        //     name: 'RecipeDetails',
-        //     component: () => import('components/recipes/RecipeDetails.vue'),
-        //     props: route => ({id: route.params.id})
-        //   }
-        // ]  
+      },
+      {
+        path: 'lists/:id?',
+        component: () => import('pages/lists/BaseLists.vue')
+      },
+      {
+        path: '/',
+        redirect: {name: 'recipes'}
       }
     ]
   },

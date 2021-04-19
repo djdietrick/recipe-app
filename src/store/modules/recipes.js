@@ -53,6 +53,7 @@ const actions = {
             title: 'New Recipe',
             ingredients: [],
             directions: [],
+            tags: [],
             userId: rootState.user.userId
         }
 

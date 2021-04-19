@@ -3,9 +3,9 @@
         <div v-if="editing">
             <form class="form ingredient__form" @submit.prevent="submit">
                 <q-input outlined type="text" class="form__input ingredient__name" v-model="ingredient.name" 
-                    placeholder="New ingredient" label="Name" @blur="submit"/>
-                <q-input outlined type="text" class="form__input ingredient__qty" v-model="ingredient.qty" label="Qty" @blur="submit"/>
-                <q-input outlined type="text" class="form__input ingredient__unit" v-model="ingredient.unit" label="Unit" @blur="submit" list="units" />
+                    placeholder="New ingredient" label="Name" @blur="submit" @focus="focused"/>
+                <q-input outlined type="text" class="form__input ingredient__qty" v-model="ingredient.qty" label="Qty" @blur="submit" @focus="focused"/>
+                <q-input outlined type="text" class="form__input ingredient__unit" v-model="ingredient.unit" label="Unit" @blur="submit" @focus="focused" list="units" />
                 <datalist id="units">
                     <option v-for="unit in units" :key="unit" :value="unit"/>
                 </datalist>
@@ -48,6 +48,9 @@ export default {
                 qty: parseInt(this.ingredient.qty.trim()),
                 
             });
+        },
+        focused() {
+            this.$emit('focused');
         }
     }
 }
@@ -60,6 +63,10 @@ export default {
         display: grid;
         grid-template-columns: 2fr 1fr 1fr;
         grid-gap: 5%;
+    }
+
+    p {
+        margin-bottom: 0.5rem;
     }
 }    
 

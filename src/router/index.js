@@ -28,7 +28,8 @@ export default function (/* { store, ssrContext } */) {
   })
 
   Router.beforeEach((to, from, next) => {
-    if(to.name !== 'Auth' && !store().state.user) {
+    let safe = ['Auth', 'Install'];
+    if(!safe.includes(to.name) && !store().state.user) {
       next({name: 'Auth'})
     } else next()
   })

@@ -18,7 +18,8 @@ module.exports = function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
-      'firebase'
+      'firebase',
+      'addressbar-color'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -92,13 +93,19 @@ module.exports = function (/* ctx */) {
 
       // Quasar plugins
       plugins: [
-        'Dialog'
+        'Dialog',
+        'AddressbarColor'
       ]
     },
 
     // animations: 'all', // --- includes all animations
     // https://quasar.dev/options/animations
-    animations: [],
+    animations: [
+      'rotateIn', 'rotateOut',
+      'fadeIn', 'fadeOut',
+      'slideInRight', 'slideOutRight',
+      'slideInLeft', 'slideOutLeft'
+    ],
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
@@ -110,9 +117,9 @@ module.exports = function (/* ctx */) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: `Recipe Keeper`,
-        short_name: `Recipe Keeper`,
-        description: `Recipe Keeper`,
+        name: `Justadash`,
+        short_name: `Justadash`,
+        description: `Justadash`,
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
