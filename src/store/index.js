@@ -5,7 +5,10 @@ import auth from './modules/auth';
 import recipes from './modules/recipes';
 import lists from './modules/lists';
 
+import VuePwaInstallPlugin from 'vue-pwa-install';
+
 Vue.use(Vuex)
+Vue.use(VuePwaInstallPlugin);
 
 /*
  * If not building with SSR mode, you can

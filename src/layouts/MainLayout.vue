@@ -7,7 +7,7 @@
           <q-btn v-if="back" key="back" flat @click="$router.go(-1)" round dense icon="arrow_back_ios" />
         </transition>
         <q-toolbar-title>
-          Recipe Keeper
+          Justadash
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -59,6 +59,15 @@
 
           <q-item clickable>
             <q-item-section>
+              <q-icon name="get_app" />
+            </q-item-section>
+            <q-item-section @click="download">
+              Download App
+            </q-item-section>
+          </q-item>
+
+          <q-item clickable>
+            <q-item-section>
               <q-icon name="exit_to_app" />
             </q-item-section>
             <q-item-section @click="onLogout">
@@ -79,6 +88,14 @@
 
 <script>
 import {mapActions, mapGetters} from 'vuex';
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  
+})
 
 export default {
   name: 'MainLayout',
@@ -114,6 +131,12 @@ export default {
       }).onOk(data => {
         this.submitFeedback(data);
       })
+    },
+    download() {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((res) => {
+        console.log(res);
+      })
     }
   },
   computed: {
@@ -134,5 +157,6 @@ export default {
 </script>
 
 <style lang="scss">
+
 
 </style>

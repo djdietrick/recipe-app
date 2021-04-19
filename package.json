@@ -1,12 +1,13 @@
 {
-  "name": "recipe-app",
+  "name": "Justadash",
   "version": "0.0.1",
-  "description": "Recipe Keeper",
-  "productName": "Recipe Keeper",
+  "description": "Justadash",
+  "productName": "Justadash",
   "author": "Dave Dietrick <djdietrick@gmail.com>",
   "private": true,
   "scripts": {
-    "dev": "cross-env QENV=development quasar dev"
+    "dev": "cross-env QENV=development quasar dev",
+    "dev:pwa": "cross-env QENV=development quasar dev -m pwa"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
@@ -14,6 +15,7 @@
     "firebase": "^8.2.1",
     "js-quantities": "^1.7.6",
     "quasar": "^1.0.0",
+    "vue-pwa-install": "^1.1.0",
     "vuex-persistedstate": "^4.0.0-beta.1"
   },
   "devDependencies": {

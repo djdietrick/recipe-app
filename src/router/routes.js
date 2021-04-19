@@ -6,6 +6,11 @@ const routes = [
     component: () => import('pages/Auth.vue')
   },
   {
+    path: '/install',
+    name: 'Install',
+    component: () => import('pages/Install.vue')
+  },
+  {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [

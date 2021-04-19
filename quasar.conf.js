@@ -117,9 +117,9 @@ module.exports = function (/* ctx */) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: `Recipe Keeper`,
-        short_name: `Recipe Keeper`,
-        description: `Recipe Keeper`,
+        name: `Justadash`,
+        short_name: `Justadash`,
+        description: `Justadash`,
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
